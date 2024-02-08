@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+    app:
+        container_name: "localhost"
+        build:
+          context: .
+          dockerfile: .docker/app/Dockerfile
+          target: php_dev
+        volumes:
+            - ./.docker/app/conf/php/php.ini:/usr/local/etc/php/php.ini
+            - ./.docker/app/conf/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+            - ./.docker/app/conf/apache/conf/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+            - ./src:/srv/src
+            - .:/srv
+            - ~/.ssh/known_hosts:/root/.ssh/known_hosts
+            - type: bind
+              source: ~/.ssh
+              target: /root/.ssh
+              read_only: true
+        ports:
+            - "8000:80"
